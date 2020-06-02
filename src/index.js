@@ -39,7 +39,7 @@ let configObj= {
 
 }
 
-fetch('http://localhost:3000/toys/:id',configObj)
+fetch('http://localhost:3000/toys/id',configObj)
 .then(res => res.json())
 .then(returnedData =>{
   console.log(returnedData)
