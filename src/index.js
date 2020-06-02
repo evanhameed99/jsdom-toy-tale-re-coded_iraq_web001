@@ -33,7 +33,7 @@ let configObj= {
   headers:
   {
   "Content-Type": "application/json",
-  Accept: "application/json"
+    Accept: "application/json"
 },
   body: JSON.stringify(updatedLike)
 
