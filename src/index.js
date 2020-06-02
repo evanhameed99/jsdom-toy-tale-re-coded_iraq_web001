@@ -23,7 +23,7 @@ function drawToyCard(property){
 </div>`);
 
 toyCollection.lastChild.lastChild.previousElementSibling.addEventListener('click',(e)=>{
-e.preventDefault();
+
 let updatedLike = {
   'likes': ++property.likes
 
