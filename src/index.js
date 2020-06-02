@@ -3,6 +3,66 @@ let addToy = false;
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.querySelector("#new-toy-btn");
   const toyForm = document.querySelector(".container");
+  const myform=document.querySelector('.add-toy-form');
+  let inputName=document.getElementsByClassName('input-text')[0];
+  let inputUrl=document.getElementsByClassName('input-text')[1];
+  let submit=document.getElementsByClassName('submit')[0];
+  let toyCollection= document.querySelector('#toy-collection');
+
+
+
+function drawToyCard(property){
+
+
+
+  toyCollection.insertAdjacentHTML('beforeend',`<div class="card">
+<h2>${property.name}</h2>
+<img src=${property.image} class="toy-avatar" />
+<p id='likep'> ${property.likes} </p>
+<button class="like-btn" >Like <3</button>
+</div>`);
+
+toyCollection.lastChild.lastChild.previousElementSibling.addEventListener('click',(e)=>{
+
+let updatedLike = {
+  'likes': ++property.likes
+
+}
+let configObj= {
+  method : 'PATCH',
+  headers:
+  {
+  "Content-Type": "application/json",
+    Accept: "application/json"
+},
+  body: JSON.stringify(updatedLike)
+
+}
+
+fetch(`http://localhost:3000/toys/${property.id}`,configObj)
+.then(res => res.json())
+.then(returnedData =>{
+drawToyCard(returnedData);
+})
+
+})
+
+
+}
+
+
+  fetch('http://localhost:3000/toys')
+  .then(resp => resp.json())
+  .then(toys=> {
+    console.log(toys);
+
+    for (const toy of toys){
+
+      drawToyCard(toy);
+
+    }
+  })
+
   addBtn.addEventListener("click", () => {
     // hide & seek with the form
     addToy = !addToy;
@@ -13,93 +73,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-//our code
+  myform.addEventListener('submit',event=>{
+    event.preventDefault();
+     let dataToBeSent={
+      name: inputName.value,
+      image: inputUrl.value
+    };
+    let configObj = {
+      method : 'POST',
+      headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+      body : JSON.stringify(dataToBeSent)
+    }
 
-function getToys(){
-  return fetch('http://localhost:3000/toys')
-  .then(response => response.json())
-  .then(function(json)
- {
-   for(const toy of json){
-     createNodeElement(toy);
-   }
- })
-}
-function addNewToy(){
-  let toyData = {
-    "name": "Jessie",
-    "image": "https://vignette.wikia.nocookie.net/p__/images/8/88/Jessie_Toy_Story_3.png/revision/latest?cb=20161023024601&path-prefix=protagonist",
-    "likes": 0
-  }
-  let newToy = {
-    method: 'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'Accept':'application/json'
-     },
-     body: JSON.stringify(toyData)
-  }
-  return fetch('http://localhost:3000/toys',newToy)
-  .then(response => response.json())
-  .then(function(json){
-    createNodeElement(json);
-  })
-}
-getToys();
+    fetch('http://localhost:3000/toys',configObj)
+    .then (response => response.json())
+    .then (anotherToy => {
+      console.log(anotherToy);
 
-function increaseLikes(id, count){
-  let newLikes = {
-    "likes": count
-  }
-  let Likes = {
-    method: 'PATCH',
-    headers:{
-      'Content-Type':'application/json',
-      'Accept':'application/json'
-     },
-     body: JSON.stringify(newLikes)
-  }
-  return fetch('http://localhost:3000/toys/'+ id,Likes)
-  .then(response => response.json())
-  .then(() =>{
-    let toyCollection = document.getElementById('toy-collection');
-    toyCollection.innerHTML = "";
-    getToys();
-  })
-}
+      drawToyCard(anotherToy);
 
-let form = document.getElementsByClassName('add-toy-form')[0];
-form.addEventListener('submit',function(e){
-  e.preventDefault();
-  addNewToy();
-})
+    })
 
-function createNodeElement(toy){
-  let toyCollection = document.getElementById('toy-collection');
-  //create toyDiv
-  let toyDiv = document.createElement('div');
-  toyDiv.classList.add('card');
-  toyCollection.appendChild(toyDiv);
- //create toyh2
-  let toyh2 = document.createElement('h2');
-  toyh2.innerHTML = toy.name;
-  toyDiv.appendChild(toyh2);
- //create toyimg
-  let toyimg = document.createElement('img');
-  toyimg.src = toy.image;
-  toyimg.style.width = '150px';
-  toyDiv.appendChild(toyimg);
- //create toyp
-  let toyp = document.createElement('p');
-  toyp.innerHTML = toy.likes + " "+"Likes";
-  toyDiv.appendChild(toyp);
- //create toybtn
-  let toybtn = document.createElement('button');
-  toybtn.innerHTML = "Like ❤";
-  toybtn.classList.add('like-btn');
-  toybtn.addEventListener('click',function(){
-    increaseLikes(toy.id,toy.likes+1);
   });
-  toyDiv.appendChild(toybtn);
-}
+
+
 });
