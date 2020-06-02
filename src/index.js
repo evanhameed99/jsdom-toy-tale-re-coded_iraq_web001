@@ -35,7 +35,7 @@ let configObj= {
   "Content-Type": "application/json",
   Accept: "application/json"
 },
-  body: JSON.stringify(updatedLike);
+  body: JSON.stringify(updatedLike)
 
 }
 
