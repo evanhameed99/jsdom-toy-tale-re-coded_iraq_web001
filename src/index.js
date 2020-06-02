@@ -22,26 +22,26 @@ function drawToyCard(property){
 <button class="like-btn" >Like <3</button>
 </div>`);
 
-toyCollection.lastChild.lastChild.previousElementSibling.addEventListener('click',()=>{
-
-let updatedLike = {
-  'likes': ++property.likes;
-
-}
-let configObj= {
-  method : 'PATCH',
-  headers:
-  {
-  "Content-Type": "application/json",
-  Accept: "application/json"
-},
-  body: JSON.stringify(updatedLike);
-
-}
-
-fetch('http://localhost:3000/toys/:id',configObj)
-
-})
+// toyCollection.lastChild.lastChild.previousElementSibling.addEventListener('click',()=>{
+//
+// let updatedLike = {
+//   'likes': ++property.likes;
+//
+// }
+// let configObj= {
+//   method : 'PATCH',
+//   headers:
+//   {
+//   "Content-Type": "application/json",
+//   Accept: "application/json"
+// },
+//   body: JSON.stringify(updatedLike);
+//
+// }
+//
+// fetch('http://localhost:3000/toys/:id',configObj)
+//
+// })
 
 
 }
