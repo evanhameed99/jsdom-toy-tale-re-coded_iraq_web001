@@ -22,7 +22,7 @@ function drawToyCard(property){
 <button class="like-btn" >Like <3</button>
 </div>`);
 
-toyCollection.lastChild.lastChild.previousElementSibling.addEventListener('click',(e)=>{
+toyCollection.lastChild.lastChild.previousElementSibling.addEventListener('click',()=>{
 
 let updatedLike = {
   'likes': ++property.likes
