@@ -25,7 +25,7 @@ function drawToyCard(property){
 toyCollection.lastChild.lastChild.previousElementSibling.addEventListener('click',()=>{
 
 let updatedLike = {
-  'likes': ++property.likes;
+  'likes': ++property.likes
 
 }
 let configObj= {
