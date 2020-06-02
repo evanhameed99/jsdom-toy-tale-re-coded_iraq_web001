@@ -42,7 +42,7 @@ let configObj= {
 fetch(`http://localhost:3000/toys/${property.id}`,configObj)
 .then(res => res.json())
 .then(returnedData =>{
-toyCollection.firstChild.lastChild.previousElementSibling.previousElementSibling.innerText=returnedData.likes;
+ console.log(toyCollection.firstChild.lastChild.previousElementSibling.previousElementSibling);
 })
 
 })
