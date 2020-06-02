@@ -22,8 +22,8 @@ function drawToyCard(property){
 <button class="like-btn" >Like <3</button>
 </div>`);
 
-toyCollection.lastChild.lastChild.previousElementSibling.addEventListener('click',()=>{
-
+toyCollection.lastChild.lastChild.previousElementSibling.addEventListener('click',(e)=>{
+e.preventDefault();
 let updatedLike = {
   'likes': ++property.likes
 
