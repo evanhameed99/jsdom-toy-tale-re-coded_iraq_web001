@@ -43,6 +43,8 @@ fetch(`http://localhost:3000/toys/${property.id}`,configObj)
 .then(res => res.json())
 .then(returnedData =>{
 drawToyCard(returnedData);
+}).then(returnedData=>{
+  window.location.reload();
 })
 
 })
