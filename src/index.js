@@ -3,66 +3,52 @@ let addToy = false;
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.querySelector("#new-toy-btn");
   const toyForm = document.querySelector(".container");
-  const myform=document.querySelector('.add-toy-form');
-  let inputName=document.getElementsByClassName('input-text')[0];
-  let inputUrl=document.getElementsByClassName('input-text')[1];
-  let submit=document.getElementsByClassName('submit')[0];
-  let toyCollection= document.querySelector('#toy-collection');
+  const toyCollection = document.getElementById('toy-collection');
+  const submitBtn = document.querySelector(".submit");
+  const newToyName = document.getElementsByClassName('input-text')[0];
+  const newToyImg = document.getElementsByClassName('input-text')[1];
+  submitBtn.addEventListener('click',(e)=>{
+    e.preventDefault();
+    let newToyObj = {
+      "name" : newToyName.value,
+      "img" : newToyImg.value,
+      "likes" : 0
+    }
 
+    let configurationObject = {
+      method : "POST",
+      headers : {
+        "Content-Type" : "application.json",
+        "Accept" : "application.json"
+      },
+      body : JSON.stringify(newToyObj)
+    }
+    console.log(configurationObject);
+    fetch('http://localhost:3000/toys',configurationObject)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch()
+  })
 
-
-function drawToyCard(property){
-
-
-
-  toyCollection.insertAdjacentHTML('beforeend',`<div class="card">
-<h2>${property.name}</h2>
-<img src=${property.image} class="toy-avatar" />
-<p id='likep'> ${property.likes} </p>
-<button class="like-btn" >Like <3</button>
-</div>`);
-
-toyCollection.lastChild.lastChild.previousElementSibling.addEventListener('click',()=>{
-
-let updatedLike = {
-  'likes': ++property.likes
-
-}
-let configObj= {
-  method : 'PATCH',
-  headers:
-  {
-  "Content-Type": "application/json",
-    Accept: "application/json"
-},
-  body: JSON.stringify(updatedLike)
-
-}
-
-fetch('http://localhost:3000/toys/:id',configObj)
-.then(res => res.json())
-.then(returnedData =>{
-  console.log(returnedData)
-})
-
-})
-
-
-}
 
 
   fetch('http://localhost:3000/toys')
-  .then(resp => resp.json())
-  .then(toys=> {
-    console.log(toys);
-
-    for (const toy of toys){
-
-      drawToyCard(toy);
-
-    }
+  .then(response => {
+    return response.json();
   })
-
+  .then(toysArray => {
+    for(obj of toysArray)
+      displayToy(obj);
+  })
+  function displayToy(toy){
+    const div = document.createElement('div');
+    div.setAttribute('class','card');
+    div.innerHTML = `<h2>${toy.name}</h2>
+    <img src=${toy.image} class="toy-avatar" />
+    <p>${toy.likes}</p>
+    <button class="like-btn">Like </button>`;
+    toyCollection.appendChild(div);
+  }
   addBtn.addEventListener("click", () => {
     // hide & seek with the form
     addToy = !addToy;
@@ -72,32 +58,4 @@ fetch('http://localhost:3000/toys/:id',configObj)
       toyForm.style.display = "none";
     }
   });
-
-  myform.addEventListener('submit',event=>{
-    event.preventDefault();
-     let dataToBeSent={
-      name: inputName.value,
-      image: inputUrl.value
-    };
-    let configObj = {
-      method : 'POST',
-      headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-      body : JSON.stringify(dataToBeSent)
-    }
-
-    fetch('http://localhost:3000/toys',configObj)
-    .then (response => response.json())
-    .then (anotherToy => {
-      console.log(anotherToy);
-
-      drawToyCard(anotherToy);
-
-    })
-
-  });
-
-
 });
